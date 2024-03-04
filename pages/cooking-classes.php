@@ -3,17 +3,20 @@ $page_title = 'Yoko\'s Kitchen';
 
 $nav_cooking_class = 'active_page';
 
-// TODO: 3. CSS classes for form feedback messages
+// 3. CSS classes for form feedback messages
+$email_feedback_class = "hidden";
+$courses_feedback_class = "hidden";
 
 // Get form data from HTTP request
-// TODO: 6. Store data in a PHP usable format (i.e. boolean, string, etc.)
+// 6. Store data in a PHP usable format (i.e. boolean, string, etc.)
 $form_values = array(
-  'course-vegetarian' => $_POST['japanese-vegetarian'], // untrusted
-  'course-sauces' => $_POST['sauces-masterclass'], // untrusted
-  'email' => $_POST['email'] // untrusted
+  'course-vegetarian' => (bool)$_POST['japanese-vegetarian'], // untrusted
+  'course-sauces' => (bool)$_POST['sauces-masterclass'], // untrusted
+  'email' => trim($_POST['email']) // untrusted
 );
 
-// TODO: 7. Store sticky values for form inputs
+// 7. Store sticky values for form inputs
+$sticky_email = $form_values["email"];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -66,14 +69,14 @@ $form_values = array(
 
       <p>Interesting in taking one of our cooking classes? Let us know which classes and we'll send you some information!</p>
 
-      <!-- TODO: 5. self-processing form -->
-      <form id="request-form" action="/cooking-classes/confirmation" method="post" novalidate>
+      <!-- 5. self-processing form -->
+      <form id="request-form" action="/cooking-classes" method="post" novalidate>
 
-        <!-- TODO: 4. hide form feedback messages using variables. -->
+        <!-- 4. hide form feedback messages using variables. -->
 
-        <!-- <div id="feedback-classes" class="feedback">TODO: 1. Pick at least one course feedback</div> -->
+        <div id="feedback-classes" class="feedback <?php echo $courses_feedback_class?>"> Please select at least one course </div> <!-- 1. "Pick at least one course" feedback -->
 
-        <!-- TODO: 8. Add sticky values to form inputs -->
+        <!-- 8. Add sticky values to form inputs -->
 
         <div class="form-label">
           <input type="checkbox" name="japanese-vegetarian" id="request-vegetarian" />
@@ -84,11 +87,11 @@ $form_values = array(
           <label for="request-sauces">Sauces Masterclass</label>
         </div>
 
-        <!-- <div id="feedback-email" class="feedback">TODO: 2. missing email feedback</div> -->
+        <div id="feedback-email" class="feedback <?php echo $email_feedback_class?>"> Please provide your email address </div> <!-- 2. missing email feedback -->
 
         <div class="form-label">
           <label for="request-email">Email:</label>
-          <input type="email" name="email" id="request-email" />
+          <input type="email" value="<?php echo htmlspecialchars($sticky_email) ?>" name="email" id="request-email" />
         </div>
 
         <div class="align-right">
